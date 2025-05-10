@@ -2,9 +2,16 @@ package com.farmterra.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-@Entity
+import java.math.BigDecimal;
+
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "order_items")
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,5 +26,5 @@ public class OrderItem {
     private Product product;
 
     private Integer quantity;
-    private Double price;
+    private BigDecimal price;
 } 

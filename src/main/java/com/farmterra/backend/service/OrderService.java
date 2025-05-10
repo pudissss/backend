@@ -1,6 +1,7 @@
 package com.farmterra.backend.service;
 
 import com.farmterra.backend.model.Order;
+import com.farmterra.backend.model.OrderItem;
 import com.farmterra.backend.model.Product;
 import com.farmterra.backend.model.User;
 import com.farmterra.backend.repository.OrderRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,15 +34,16 @@ public class OrderService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         
-        User buyer = userRepository.findByEmail(currentUsername)
-            .orElseThrow(() -> new RuntimeException("Buyer not found"));
+        User user = userRepository.findByEmail(currentUsername)
+            .orElseThrow(() -> new RuntimeException("User not found"));
         
-        // Set buyer for the order
-        order.setBuyer(buyer);
+        // Set user for the order
+        order.setUser(user);
+        order.setOrderDate(LocalDateTime.now());
         
         // Calculate total amount and validate stock
         BigDecimal totalAmount = BigDecimal.ZERO;
-        for (Order.OrderItem item : order.getOrderItems()) {
+        for (OrderItem item : order.getOrderItems()) {
             Product product = productRepository.findById(item.getProduct().getId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
             
@@ -58,7 +61,7 @@ public class OrderService {
             totalAmount = totalAmount.add(product.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
         }
         
-        order.setTotalAmount(totalAmount);
+        order.setTotalAmount(totalAmount.doubleValue());
         order.setStatus(Order.OrderStatus.PENDING);
         
         return orderRepository.save(order);
@@ -72,8 +75,8 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public List<Order> getOrdersByBuyer(User buyer) {
-        return orderRepository.findByBuyer(buyer);
+    public List<Order> getOrdersByUser(User user) {
+        return orderRepository.findByUser(user);
     }
 
     public List<Order> getOrdersByStatus(Order.OrderStatus status) {
