@@ -1,0 +1,4 @@
+com\farmterra\backend\dto\RegisterRequest.class
+com\farmterra\backend\dto\LoginRequest.class
+com\farmterra\backend\model\User.class
+com\farmterra\backend\model\User$UserRole.class
