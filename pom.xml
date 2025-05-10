@@ -35,11 +35,11 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         
-        <!-- MySQL Connector -->
+        <!-- Database -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
         
         <!-- JWT Token Support -->

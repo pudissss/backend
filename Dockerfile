@@ -14,6 +14,8 @@ RUN ls -la target/
 # Set environment variables
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
 ENV SPRING_PROFILES_ACTIVE="prod"
+ENV SPRING_DATASOURCE_DRIVER_CLASS_NAME="org.postgresql.Driver"
+ENV SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT="org.hibernate.dialect.PostgreSQLDialect"
 
 # Expose the port
 EXPOSE 8081
