@@ -12,18 +12,18 @@ COPY src ./src
 # Build the application
 RUN mvn clean package -DskipTests
 
-# Verify the JAR file exists
-RUN ls -l target/*.jar
+# List contents of target directory to verify build
+RUN ls -la target/
 
 # Run stage
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 # Copy the JAR file from build stage
-COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar ./app.jar
 
-# Verify the JAR file exists in the final image
-RUN ls -l app.jar
+# List contents to verify JAR exists
+RUN ls -la
 
 # Set environment variables
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
@@ -33,4 +33,4 @@ ENV SPRING_PROFILES_ACTIVE="prod"
 EXPOSE 8081
 
 # Run the application
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"] 
+CMD ["java", "-jar", "app.jar"] 
