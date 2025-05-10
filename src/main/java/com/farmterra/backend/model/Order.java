@@ -20,13 +20,14 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "buyer_id")
-    private User buyer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
-    private BigDecimal totalAmount;
+    private LocalDateTime orderDate;
+    private Double totalAmount;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
@@ -47,7 +48,7 @@ public class Order {
 
     public enum OrderStatus {
         PENDING,
-        PROCESSING,
+        CONFIRMED,
         SHIPPED,
         DELIVERED,
         CANCELLED
@@ -70,4 +71,8 @@ class OrderItem {
 
     private Integer quantity;
     private BigDecimal price;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 }
