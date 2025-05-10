@@ -86,7 +86,7 @@
     </dependencies>
     
     <build>
-        <finalName>app</finalName>
+        <finalName>backend-0.0.1-SNAPSHOT</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
