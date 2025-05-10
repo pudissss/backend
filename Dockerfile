@@ -1,29 +1,15 @@
-# Build stage
-FROM maven:3.9-eclipse-temurin-17 AS build
+FROM maven:3.9-eclipse-temurin-17
+
 WORKDIR /app
 
-# Copy pom.xml first to cache dependencies
-COPY pom.xml .
-RUN mvn dependency:go-offline
-
-# Copy source code
-COPY src ./src
+# Copy the entire project
+COPY . .
 
 # Build the application
 RUN mvn clean package -DskipTests
 
-# List contents of target directory to verify build
+# Verify the JAR exists
 RUN ls -la target/
-
-# Run stage
-FROM eclipse-temurin:17-jre-alpine
-WORKDIR /app
-
-# Copy the JAR file from build stage
-COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar ./app.jar
-
-# List contents to verify JAR exists
-RUN ls -la
 
 # Set environment variables
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
@@ -33,4 +19,4 @@ ENV SPRING_PROFILES_ACTIVE="prod"
 EXPOSE 8081
 
 # Run the application
-CMD ["java", "-jar", "app.jar"] 
+CMD ["java", "-jar", "target/backend-0.0.1-SNAPSHOT.jar"] 
